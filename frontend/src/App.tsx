@@ -54,13 +54,13 @@ const publicRoutes = [
 
 const loggedInRoutes = [
   { path: "/", Component: HomePage },
-  { path: "/bank", Component: BankPage },
   { path: "/view/:_id", Component: ViewQuestion, loader: qnLoader },
   { path: "/collab", Component: ViewQuestion },
   { path: "*", element: <Navigate to="/" /> }, //redirect all other routes to /
 ];
 
 const adminOnlyRoutes = [
+  { path: "/bank", Component: BankPage },
   { path: "/create", Component: CreateQuestion },
   { path: "/edit/:_id", Component: EditQuestion, loader: qnLoader },
 ];

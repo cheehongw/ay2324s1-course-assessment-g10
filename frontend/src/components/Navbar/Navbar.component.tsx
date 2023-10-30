@@ -4,6 +4,8 @@ import {
   Button,
   HStack,
   chakra,
+  ButtonGroup,
+  Box,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -17,28 +19,24 @@ export const Navbar = () => {
 
   return (
     <chakra.header boxShadow={"md"} minH="10vh" zIndex="999">
-      <Flex w="100%" px="6" py="2vh" align={"center"} justify={"space-between"}>
-        <HStack spacing="4px">
+      <Flex w="100%" py="2vh" pl="40" pr="6" align={"center"} justify={"space-between"}>
+        <HStack spacing="8px">
           <Link to="/">
             <Button colorScheme="linkedin" variant="outline">
               Peer Prep
             </Button>
           </Link>
 
-          <Link to="/">
-            <Button colorScheme="blue" variant="ghost">
-              Home
-            </Button>
-          </Link>
-
-          <Link to="/bank">
-            <Button variant="ghost">Bank</Button>
-          </Link>
 
           {isAdmin ? (
-            <Link to="/create">
-              <Button variant="ghost">Create</Button>
-            </Link>
+            <Box rounded='md'bg='pink'>
+              <Link to="/bank">
+                <Button variant="ghost" colorScheme="red">Admin Question Bank</Button>
+              </Link>
+              <Link to="/create">
+                <Button variant="ghost" colorScheme="red">Create</Button>
+              </Link>
+            </Box>
           ) : (
             <></>
           )}
