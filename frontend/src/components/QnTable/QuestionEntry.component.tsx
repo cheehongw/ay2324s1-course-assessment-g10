@@ -1,4 +1,4 @@
-import { ButtonGroup, HStack, IconButton, Tag, Td, Text, Tr } from "@chakra-ui/react";
+import { ButtonGroup, Button, HStack, IconButton, Tag, Td, Text, Tr } from "@chakra-ui/react";
 import { Question } from "../../models/Question.model";
 import { Link } from "react-router-dom";
 import { DeleteQnBtn } from "../DeleteQnBtn/DeleteQnBtn.component";
@@ -11,11 +11,12 @@ import { deleteQuestion } from "../../reducers/questionsSlice";
 interface QuestionEntryProps {
     qn: Question, 
     isAdmin: boolean
+    isAdminPage: boolean
   }
 
 export function QuestionEntry(props : QuestionEntryProps) {
     
-    const {qn, isAdmin} = props;
+    const {qn, isAdmin, isAdminPage} = props;
     const dispatch = useDispatch();
 
     const onDelete = async (_id: string) => {
@@ -40,7 +41,7 @@ export function QuestionEntry(props : QuestionEntryProps) {
         <Td>
           <Tag colorScheme={diffToScheme(qn.difficulty)}>{qn.difficulty}</Tag>
         </Td>
-        {isAdmin ? (
+        {(isAdmin && isAdminPage) ? (
           <Td>
             <ButtonGroup>
               <Link to={`/edit/${qn._id}`}>
@@ -53,8 +54,12 @@ export function QuestionEntry(props : QuestionEntryProps) {
             </ButtonGroup>
           </Td>
         ) : (
-          <></>
-        )}
+          <Td>
+            <Button colorScheme="green">
+              Look for Match
+            </Button>
+          </Td>)
+        }
       </Tr>
     );
   };

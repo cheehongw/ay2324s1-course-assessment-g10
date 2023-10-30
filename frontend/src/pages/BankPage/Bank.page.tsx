@@ -50,7 +50,7 @@ const BankPage = () => {
           />
         </HStack>
       </Box>
-      <QnTable filteredQn={filteredQns} pageSize={7}></QnTable>
+      <QnTable filteredQn={filteredQns} pageSize={7} isAdminPage={true}></QnTable>
     </VStack>
   );
 };

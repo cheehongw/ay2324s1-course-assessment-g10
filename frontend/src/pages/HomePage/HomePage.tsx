@@ -1,30 +1,58 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router-dom";
-import { QuestionEditor } from "../../components/QuestionEditor/QuestionEditor.component";
-import { SolvedTable } from "../../components/SolvedTable/SolvedTable.component";
-import { selectUser } from "../../reducers/authSlice";
-import { useSelector } from "react-redux";
+import { QnTable } from "../../components/QnTable/QnTable.component";
+import { FilterBar } from "../../components/QnFilter/QnFilter.component";
+import { DifficultyFilter } from "../../components/QnFilter/DifficultyFilter.component";
+import { VStack, useToast, Box, HStack } from "@chakra-ui/react";
+import { QnFilter, Question } from "../../models/Question.model";
+import { loadQuestions } from "../../data/sampleqn";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilteredQuestions, setQuestions } from "../../reducers/questionsSlice";
+import { RootState } from "../../reducers/store";
+import { fetchAllQuestions } from "../../api/questions";
 
-function HomePage() {
-  // Use the useSelector hook to access the user from the Redux store
-  const user = useSelector(selectUser);
+const HomePage = () => {
+  const [filter, setFilter] = useState<QnFilter>({});
+  const [difficultyFilter, setDifficultyFilter] = useState<[number, number]>([0, 10]);
+  const filteredQns = useSelector((state: RootState) => selectFilteredQuestions(state, { ...filter, difficultyFilter }));
+  const dispatch = useDispatch();
+  const toast = useToast();
 
-  if (user === null) {
-    return (
-      <div>
-        <QuestionEditor />
-      </div>
-    );
-  }
+  useEffect(() => {
+    console.log('fetching...')
+    
+    if (process.env.REACT_APP_ENV_TYPE !== 'prod') {
+      loadQuestions();
+    } else {      
+      fetchAllQuestions().then((questions : Question[]) => {
+        dispatch(setQuestions(questions));
+      }).catch((err) => {
+        console.log(err.message);
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error'
+        });
+      });
+    }
+  }, []);
 
-  // At this point, you're sure that user is not null
   return (
-    <div>
-      <QuestionEditor />
-      <SolvedTable userId={user.id} pageSize={4} />
-    </div>
+    <VStack spacing="3">
+      <Box w="80%">
+        <HStack spacing="2">
+          <FilterBar
+            qnFilter={filter.qnFilter}
+            setFilter={(newFilter) => setFilter(newFilter)}
+          />
+          <DifficultyFilter
+            difficultyFilter={difficultyFilter}
+            setDifficultyFilter={(newDifficultyFilter) => setDifficultyFilter(newDifficultyFilter)}
+          />
+        </HStack>
+      </Box>
+      <QnTable filteredQn={filteredQns} pageSize={7} isAdminPage={false}></QnTable>
+    </VStack>
   );
-}
+};
 
 export default HomePage;

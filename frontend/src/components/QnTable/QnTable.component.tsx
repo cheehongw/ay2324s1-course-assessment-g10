@@ -18,11 +18,12 @@ import { QuestionEntry } from "./QuestionEntry.component";
 export type TableProp = {
   filteredQn: Question[];
   pageSize?: number;
+  isAdminPage?: boolean
 };
 
 
 export function QnTable(pp: TableProp) {
-  const { filteredQn, pageSize = 10 } = pp;
+  const { filteredQn, pageSize = 10, isAdminPage = false} = pp;
   const [pageNumber, changePage] = useState(1);
   const isAdmin = useSelector(selectIsAdmin);
 
@@ -51,7 +52,7 @@ export function QnTable(pp: TableProp) {
               boxShadow: "xl",
             }}
             width="80%"
-            sx={{ tableLayout: "fixed" }}
+            sx={{ tableLayout: "auto" }}
           >
             <TableCaption>
               <Center>
@@ -67,11 +68,11 @@ export function QnTable(pp: TableProp) {
               <Tr boxShadow="base">
                 <Th>Questions</Th>
                 <Th>Type</Th>
-                <Th>Difficulty</Th>
-                {isAdmin ? <Th>Modify/Delete</Th> : <></>}
+                <Th w="10%">Difficulty</Th>
+                <Th> {(isAdmin && isAdminPage) ? "Modify/Delete" : "Collab"} </Th>
               </Tr>
             </Thead>
-            <Tbody>{getCurrentPage(pageNumber).map((qn) => QuestionEntry({qn: qn, isAdmin: isAdmin}))}</Tbody>
+            <Tbody>{getCurrentPage(pageNumber).map((qn) => QuestionEntry({qn: qn, isAdmin: isAdmin, isAdminPage: isAdminPage}))}</Tbody>
           </Table>
         </Center>
       </TableContainer>
