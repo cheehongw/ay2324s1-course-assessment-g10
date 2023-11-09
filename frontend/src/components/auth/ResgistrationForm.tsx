@@ -34,8 +34,8 @@ export default function RegistrationForm() {
     }).catch((err) => {
       console.log(err);
       toast({
-        title: 'Failed to Login',
-        description: 'Incorrect username or password',
+        title: 'Failed to Register',
+        description: 'Username has been taken',
         status: 'error',
         isClosable: true,
       });
