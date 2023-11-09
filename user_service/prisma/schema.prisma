@@ -21,7 +21,6 @@ model User {
   username        String   @db.VarChar(255) @unique
   hashedPassword  String   
   role            Role     @default(USER)
-  answeredQuestions AnsweredQuestion[]
 }
 
 
